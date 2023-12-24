@@ -16,6 +16,18 @@ bg = background()
 player = Player()
 obs = obstacle()
 
+
+
+
+# player position and declarations (velocity & gravity for jumping)
+player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
+ground = 400
+player_pos.y = ground
+player_pos.x = 50
+player_velocity = pygame.Vector2(0,0)
+gravity = pygame.Vector2(0,300)
+
+
 #obstacle definitions
 #random intervall for when smth spawns
 intervall = random.randint(6,8)
@@ -29,26 +41,19 @@ array_exception = []
 array_exception.append(1)
 array_exception.append(2)
 array_exception.append(3)
+which_obstacle = [0,0,0,0]
 
 
 for x in range(4):
     rand_obstacle_numb = random.randint(0,3)
     if obs.obstacles[rand_obstacle_numb] == obs.gull:
-        obstacle_y[x] = 400
+        obstacle_y[x] = 320
     else:
-        obstacle_y[x] = 550
+        obstacle_y[x] = 500
     chosen_obstacle[x] = obs.obstacles[rand_obstacle_numb]
+    which_obstacle[x] = x
 
 curr_spawn = 0
-
-
-
-# player position and declarations (velocity & gravity for jumping)
-player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
-ground = 400
-player_pos.y = ground
-player_velocity = pygame.Vector2(0,0)
-gravity = pygame.Vector2(0,300)
 
 # jumping & sliding sdeclarations
 player_jumping = False
@@ -116,33 +121,33 @@ while running:
     # there are 3 obstacles possibles 
         
     for x in range(4):
-        if obstacle_x[x] < -1240:
-            obstacle_x[x] = 1280
+        if obstacle_x[x] < -500:
+            obstacle_x[x] = 1290
             rand_obstacle_numb = random.randint(0,3)
             if obs.obstacles[rand_obstacle_numb] == obs.gull:
-               obstacle_y[curr_spawn] = 400
+               obstacle_y[x] = 320
             else:
-                obstacle_y[curr_spawn] = 550
-            chosen_obstacle[curr_spawn] = obs.obstacles[rand_obstacle_numb]
-            if curr_spawn < 2:
-                curr_spawn += 1
-            else:
-                curr_spawn = 0
+                obstacle_y[x] = random.randint(480,520)
+            chosen_obstacle[x] = obs.obstacles[rand_obstacle_numb]
             array_exception.append(x)
+
+            #saving the variable, so i can adjust the hitbox later
+            which_obstacle[x] = x
 
 
     if spawn_timer >= intervall:
-        intervall = random.randint(5,7)
+        intervall = random.randint(3,5)
         spawn_timer = 0
-        print(count)
-        print(array_exception)
-        array_exception.remove(count)
+        #if there is an open spot for the next spawn
+        if count in array_exception:
+            array_exception.remove(count)
 
-        if count < 3:
-            count += 1
-        else:
-            count = 0
+            if count < 3:
+                count += 1
+            else:
+                count = 0
 
+    #making the spawned obstacles move
     for x in range(4):
         if x not in array_exception:
             obstacle_x[x] = scene_moving(obstacle_x[x], floor_velocity)
@@ -169,9 +174,38 @@ while running:
     screen.blit(chosen_obstacle[2], (obstacle_x[2], obstacle_y[2]))
     screen.blit(chosen_obstacle[3], (obstacle_x[3], obstacle_y[3]))
 
+    pygame.draw.circle(screen, "red", (470,400), 50)
 
 
-    screen.blit(player.currentSprite, (50,player_pos.y))
+
+    screen.blit(player.currentSprite, (player_pos.x,player_pos.y))
+
+    #hitbox activities
+    for x in range(3): 
+        ob_x = obstacle_x[x]
+        ob_y = obstacle_y[x]
+        ob_x_hitbox = obs.hitbox[which_obstacle[x]][0] + ob_x
+        ob_y_hitbox = obs.hitbox[which_obstacle[x]][1] + ob_y
+
+        # Player Hitbox ist smaller when sliding
+        if(player_slide):
+            player_y_downer = player_pos.y + 200
+            player_y_upper = player_pos.y 
+            player_x_left = player_pos.x 
+            player_x_right = player_pos.x + 240
+        else:
+            player_y_downer = player_pos.y + 250
+            player_y_upper = player_pos.y           
+            player_x_left = player_pos.x 
+            player_x_right = player_pos.x + 420
+        
+        print(f'{ob_x} <= {player_x_right} + {ob_x_hitbox} >= {player_x_left} + {ob_y} <= {player_y_downer} + {ob_y_hitbox} >= {player_y_upper}')
+        if ob_x <= player_x_right and ob_x_hitbox >= player_x_left and ob_y <= player_y_downer and ob_y_hitbox >= player_y_upper:
+            print("HITBOX")
+            pygame.display.set_caption("OOPSIES")
+            pygame.event.post(pygame.event.Event(pygame.QUIT))
+
+
 
     # flip() the display to put your work on screen
     pygame.display.flip()
