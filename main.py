@@ -134,7 +134,6 @@ while running:
             #saving the variable, so i can adjust the hitbox later
             which_obstacle[x] = x
 
-
     if spawn_timer >= intervall:
         intervall = random.randint(3,5)
         spawn_timer = 0
@@ -174,9 +173,6 @@ while running:
     screen.blit(chosen_obstacle[2], (obstacle_x[2], obstacle_y[2]))
     screen.blit(chosen_obstacle[3], (obstacle_x[3], obstacle_y[3]))
 
-    pygame.draw.circle(screen, "red", (470,400), 50)
-
-
 
     screen.blit(player.currentSprite, (player_pos.x,player_pos.y))
 
@@ -189,15 +185,15 @@ while running:
 
         # Player Hitbox ist smaller when sliding
         if(player_slide):
-            player_y_downer = player_pos.y + 200
-            player_y_upper = player_pos.y 
-            player_x_left = player_pos.x 
-            player_x_right = player_pos.x + 240
+            player_y_downer = 690
+            player_y_upper = 610 
+            player_x_left = 200
+            player_x_right = 300
         else:
-            player_y_downer = player_pos.y + 250
+            player_y_downer = player_pos.y + 150
             player_y_upper = player_pos.y           
-            player_x_left = player_pos.x 
-            player_x_right = player_pos.x + 420
+            player_x_left = 200
+            player_x_right = 360
         
         print(f'{ob_x} <= {player_x_right} + {ob_x_hitbox} >= {player_x_left} + {ob_y} <= {player_y_downer} + {ob_y_hitbox} >= {player_y_upper}')
         if ob_x <= player_x_right and ob_x_hitbox >= player_x_left and ob_y <= player_y_downer and ob_y_hitbox >= player_y_upper:

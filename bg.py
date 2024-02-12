@@ -9,7 +9,7 @@ class background:
     floor2 = pygame.image.load("data/bg/Ice2.png")
 
     def update_Snow(self):
-        if pygame.time.get_ticks() % 1000 < 500:
+        if pygame.time.get_ticks() % 800 < 400:
             self.currentSnow = self.snow2
         else:
             self.currentSnow = self.snow1

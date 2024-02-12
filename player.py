@@ -21,7 +21,7 @@ class Player:
             self.currentSprite = self.slide
             return
         
-        if pygame.time.get_ticks() % 500 < 250:
+        if pygame.time.get_ticks() % 400 < 200:
             self.currentSprite = self.SecondPeng
         else:
             self.currentSprite = self.firstPeng

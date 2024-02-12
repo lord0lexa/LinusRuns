@@ -6,5 +6,5 @@ class obstacle:
     seal = pygame.image.load("data/obstacles/seal.png")
     gull = pygame.image.load("data/obstacles/gull.png")
     obstacles = [puddle1, puddle2, seal, gull]
-    hitbox = [[240,70],[220,76],[220,113], [240,163]]
+    hitbox = [[200,60],[130,30],[200,100], [200,120]]
     
