@@ -55,7 +55,7 @@ for x in range(4):
 
 curr_spawn = 0
 
-# jumping & sliding sdeclarations
+# jumping & sliding declarations
 player_jumping = False
 player_slide = False
 slider_timer = 0
@@ -165,6 +165,9 @@ while running:
     screen.blit(bg.floor1, (floor_x1,490))
     screen.blit(bg.floor2, (floor_x2, 490))
     screen.blit(bg.currentSnow, (10,10))
+    
+    # testing purposes (finding out Hitbox)
+    # screen.blit(bg.coordinates, (0,0))
 
     #obstacles
 
@@ -185,21 +188,23 @@ while running:
 
         # Player Hitbox ist smaller when sliding
         if(player_slide):
-            player_y_downer = 690
-            player_y_upper = 610 
-            player_x_left = 200
-            player_x_right = 300
+            player_y_downer = 650
+            player_y_upper = 550 
+            player_x_left = 100
+            player_x_right = 250
         else:
-            player_y_downer = player_pos.y + 150
-            player_y_upper = player_pos.y           
-            player_x_left = 200
-            player_x_right = 360
+            player_y_downer = player_pos.y + 200
+            player_y_upper = player_pos.y + 50        
+            player_x_left = 10
+            player_x_right = 200
         
         print(f'{ob_x} <= {player_x_right} + {ob_x_hitbox} >= {player_x_left} + {ob_y} <= {player_y_downer} + {ob_y_hitbox} >= {player_y_upper}')
-        if ob_x <= player_x_right and ob_x_hitbox >= player_x_left and ob_y <= player_y_downer and ob_y_hitbox >= player_y_upper:
-            print("HITBOX")
-            pygame.display.set_caption("OOPSIES")
-            pygame.event.post(pygame.event.Event(pygame.QUIT))
+
+        if ob_x <= player_x_right and ob_x_hitbox >= player_x_left:
+            if ob_y <= player_y_downer and ob_y_hitbox >= player_y_upper:
+                print("HITBOX")
+                pygame.display.set_caption("OOPSIES")
+                pygame.event.post(pygame.event.Event(pygame.QUIT))
 
 
 
