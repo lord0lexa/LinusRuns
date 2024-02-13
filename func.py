@@ -4,11 +4,11 @@ def floor_moving(floor_a, floor_b, velocity):
     floor_a -= velocity
     floor_b -= velocity
 
-    if floor_a < -1250:
-        floor_a = 1250
+    if floor_a < -1240:
+        floor_a = 1240
 
-    if floor_b < -1250:
-        floor_b = 1250
+    if floor_b < -1240:
+        floor_b = 1240
 
     return floor_a, floor_b
 
