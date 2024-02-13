@@ -11,7 +11,7 @@ clock = pygame.time.Clock()
 running = True
 dt = 0
 
-# instances of my classes <3
+# instances of my classes 
 bg = background()
 player = Player()
 obs = obstacle()
@@ -42,12 +42,13 @@ array_exception = [1,2,3]
 which_obstacle = [0,0,0,0]
 
 
+# spawning 4 obstacles which are outside the frame
 for var in range(4):
     rand_obstacle_numb = random.randint(0,3)
     if obs.obstacles[rand_obstacle_numb] == obs.gull:
-        obstacle_y[var] = 320
+        obstacle_y[var] = 330
     else:
-        obstacle_y[var] = 500
+        obstacle_y[var] = 520
     chosen_obstacle[var] = obs.obstacles[rand_obstacle_numb]
     which_obstacle[var] = var
 
@@ -96,10 +97,11 @@ while running:
         player_jumping = False
         floor_velocity = 7
         slider_timer = 0
-        player_velocity += gravity * dt*5
+        player_velocity += gravity * dt*5 
+        player_velocity.y += 10
         ground = 500
 
-    #stopping the slide
+    #stopping sliding with timer
     if player_slide:
         slider_timer += dt
         if slider_timer > slide_duration:
@@ -108,6 +110,12 @@ while running:
             ground = 400
             player_pos.y = ground
 
+    # stopping sliding by pressing key-left or key-right
+    if player_slide and (keys[pygame.K_LEFT] or keys[pygame.K_RIGHT]):
+        player_slide = False
+        floor_velocity = 5
+        ground = 400
+        player_pos.y = ground
 
     # falling when you jump
     player_pos.y += player_velocity.y * dt*1.5
@@ -130,9 +138,9 @@ while running:
             obstacle_x[var] = 1290
             rand_obstacle_numb = random.randint(0,3)
             if obs.obstacles[rand_obstacle_numb] == obs.gull:
-               obstacle_y[var] = 320
+               obstacle_y[var] = 330
             else:
-                obstacle_y[var] = random.randint(510,530)
+                obstacle_y[var] = random.randint(530,540)
             chosen_obstacle[var] = obs.obstacles[rand_obstacle_numb]
             array_exception.append(var)
 
